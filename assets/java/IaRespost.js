@@ -15,11 +15,12 @@ let pesquisas = {
     'questSearch':[
         'prazer em conhecelo',
         ', A pesquisa foi dividida em',
-        ', qual quer saber primeiro'
+        ', qual quer saber primeiro',
+        ', como já dito A pesquisa foi dividida em'
     ],
     'choises':[
-        [""],
-        [""]
+        ["Primeira Opção", "Resumo", "opção 1"],
+        ["Segunda Opção", "tipos", "opção 2"]
     ],
     'pesquisa':{
         0:'Unit Testing, ou teste unitário, é uma prática fundamental no desenvolvimento de software. Um framework de teste unitário é uma ferramenta que oferece estrutura e suporte para a criação e execução desses testes de forma automatizada. Ele ajuda os desenvolvedores a garantir que partes específicas do código (unidades) funcionem conforme o esperado, identificando possíveis problemas o mais cedo possível no ciclo de desenvolvimento. A estrutura básica de um teste unitário envolve definir casos de teste que verificam se uma determinada funcionalidade ou método produz os resultados esperados. Isso ajuda a detectar regressões e a manter a confiança no código conforme ele evolui. A prática de testes unitários é essencial para o desenvolvimento ágil e a manutenção de software de alta qualidade. Ela não apenas ajuda a encontrar bugs precocemente, mas também facilita a refatoração do código sem introduzir problemas inadvertidos. Existem vários frameworks de teste unitário em diferentes linguagens de programação.',
@@ -72,10 +73,28 @@ class IaRespost {
                 }
 
             case 'A':
-                return 'A..';
+                this.topico = 'choice2';
+                return pesquisas['pesquisa'][0];
 
             case 'B':
-                return 'B..';
+                this.topico = 'choice2';
+                return pesquisas['pesquisa'][1];
+            
+            case 'choice2':
+                let topsc2 = '';
+                for(let i=0; i<pesquisas['search']['quantidade']; i++){
+                    if(i==0){
+                        topsc += pesquisas['search']['tops'][i];
+                    }else if(i == (pesquisas['search']['quantidade'] - 1)){
+                        topsc += ' e '+pesquisas['search']['tops'][i];
+                    }else{
+                        topsc += ', '+pesquisas['search']['tops'][i];
+                    }
+                }
+                this.nameUser = this.nameUser == ''? text:this.nameUser;
+                let textEnv2 = this.nameUser+pesquisas['questSearch'][3]+' '+pesquisas['search']['quantidade']+' tópicos '+topsc2+'  '+pesquisas['questSearch'][2]+' dessa vez '+this.nameUser+'?';
+                this.topico = 'choice';
+                return textEnv2;
         };
     }
 }
