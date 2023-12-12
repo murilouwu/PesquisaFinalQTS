@@ -6,14 +6,10 @@ let pesquisas = {
     'Tema' : '',
     'ChoiceUser':'',
     'search':{
-        'quantidade':'4',
+        'quantidade': 2,
         'tops':[
-            'a',
-            'a',
-            'a',
-            'a',
-            'a',
-            'a',
+            'Resumo',
+            'Tipos',
         ]
     },
     'questSearch':[
@@ -22,10 +18,12 @@ let pesquisas = {
         ', qual quer saber primeiro'
     ],
     'choises':[
-        ["a"]
+        [""],
+        [""]
     ],
     'pesquisa':{
-        'web':'',
+        0:'Unit Testing, ou teste unitário, é uma prática fundamental no desenvolvimento de software. Um framework de teste unitário é uma ferramenta que oferece estrutura e suporte para a criação e execução desses testes de forma automatizada. Ele ajuda os desenvolvedores a garantir que partes específicas do código (unidades) funcionem conforme o esperado, identificando possíveis problemas o mais cedo possível no ciclo de desenvolvimento. A estrutura básica de um teste unitário envolve definir casos de teste que verificam se uma determinada funcionalidade ou método produz os resultados esperados. Isso ajuda a detectar regressões e a manter a confiança no código conforme ele evolui. A prática de testes unitários é essencial para o desenvolvimento ágil e a manutenção de software de alta qualidade. Ela não apenas ajuda a encontrar bugs precocemente, mas também facilita a refatoração do código sem introduzir problemas inadvertidos. Existem vários frameworks de teste unitário em diferentes linguagens de programação.',
+        1:'1. JUnit (Java): Muito utilizado no ecossistema Java, o JUnit é uma estrutura de teste amplamente adotada para testes unitários e integração.                                                                                                                                                                                                                                                               2. pytest (Python): No mundo Python, o pytest é popular. Ele oferece simplicidade e flexibilidade, além de suportar testes unitários e de integração.                                                                                                                                                                                                                                                               3. NUnit (C#): Para desenvolvedores que utilizam C# no ambiente .NET, o NUnit é uma escolha comum para testes unitários.                                                                                                                                                                                                                                                               4. JUnit (JavaScript/Java): No contexto de JavaScript, há frameworks como o Jasmine para testes unitários e o Jest, que é usado em projetos baseados no React.'
     }
 };
 
@@ -45,20 +43,39 @@ class IaRespost {
     botResove(text){
         switch (this.topico){
             case 'Nome':
+                let topsc = '';
+                for(let i=0; i<pesquisas['search']['quantidade']; i++){
+                    if(i==0){
+                        topsc += pesquisas['search']['tops'][i];
+                    }else if(i == (pesquisas['search']['quantidade'] - 1)){
+                        topsc += ' e '+pesquisas['search']['tops'][i];
+                    }else{
+                        topsc += ', '+pesquisas['search']['tops'][i];
+                    }
+                }
                 this.nameUser = this.nameUser == ''? text:this.nameUser;
-                let textEnv = pesquisas['questSearch'][0]+' '+this.nameUser+pesquisas['questSearch'][1]+' '+pesquisas['search']['quantidade']+' tópicos '+pesquisas['questSearch'][2]+' '+this.nameUser+'?';
+                let textEnv = pesquisas['questSearch'][0]+' '+this.nameUser+pesquisas['questSearch'][1]+' '+pesquisas['search']['quantidade']+' tópicos '+topsc+'  '+pesquisas['questSearch'][2]+' '+this.nameUser+'?';
                 this.topico = 'choice';
                 return textEnv;
             
             case 'choice':            
                 let minText = text.toLowerCase();
-                return minText;
+                if(pesquisas['choises'][0].some(pss => minText.includes(pss.toLowerCase()))){
+                    this.topico = 'A';
+                    return 'bom, então vamos falar sobre o '+pesquisas['search']['tops'][0]+' certo?';
+                }else if(pesquisas['choises'][1].some(pss => minText.includes(pss.toLowerCase()))){
+                    this.topico = 'B';
+                    return 'bom, então vamos falar sobre o '+pesquisas['search']['tops'][1]+' certo?';
+                }else{
+                    this.topico = 'Nome';
+                    return 'Responda algo comprenssivel, favor!'
+                }
 
-            case 'PesquisaA':
-                return 'okA..';
+            case 'A':
+                return 'A..';
 
-            case 'PesquisaB':
-                return 'okB..';
+            case 'B':
+                return 'B..';
         };
     }
 }
