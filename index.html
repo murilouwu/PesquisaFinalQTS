@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/39cab4bf95.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.js" integrity="sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="assets/css/tv.css">
+        <link rel="stylesheet" href="assets/css/index.css">
+        <script src="assets/java/SystemPc.js"></script>
+        <script src="assets/java/IaRespost.js"></script>
+        <title>Pesquisas</title>
+    </head>
+    <body>
+        <div class="blurEdit"></div>
+        <div class="old-tv">
+            <main>
+                <div class="error-noise">
+                    <div class="error-effect">
+                        <div class="old-tv-content">
+                        </div>
+                        <div class="Conteudo">
+                            <div class="cmdTerminal">
+                                <h2 class="title" id="res">Pesquisas</h2>
+                                <button class="btncdmexit"><i class="fa-solid fa-xmark"></i></button>
+                                <div class="ResText" id="ResIa"></div>
+                                <div class="opacity0">
+                                    <input type="text" id="YourText">
+                                    <button class="btnEnviar"></button>
+                                </div>
+                                <div class="doll">
+                                    <img src="assets/DollGifs/DollStatic.gif" id="Doll">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="assets/imagen/black.png" class="screenLoad">
+                </div>
+            </main>
+            <div class="speaker"></div>
+            <nav class="power">
+                <button id="btnClickAnim"></button>
+            </nav>
+            <nav></nav>
+            <footer></footer>
+        </div>
+        <img src="assets/imagen/paper.png" class="paperInfo">
+        <div class="mesa"></div>
+        <img src="assets/imagen/hand.png" class="handpower">
+    </body>
+    <script>
+        //bot system
+        const BotJota = new IaRespost();
+            BotJota.nameBOT = 'BOT_Jotaro';
+            BotJota.topico = 'Unit Testing Frameworks';
+
+        //variveis de construção do sistema
+        const PC_Obj = new SistemaPc();
+            PC_Obj.namePc = 'HostTop';
+
+        //objetos no sistema
+        const titulo = document.querySelector('#res');
+        const TextDiv = document.querySelector('#ResIa');
+        const InputUser = document.querySelector('#YourText');
+        const btnEnvUser = document.querySelector('.btnEnviar');
+        const DollBot = document.querySelector('#Doll');
+        
+        //add pc name
+        window.onload = ()=>{titulo.innerHTML += ' - '+PC_Obj.namePc;};
+
+        //scroll do #ResIa
+        var event = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
+        window.addEventListener(event, function(e){
+            PC_Obj.callback(e, TextDiv);
+        }); 
+            
+        //Ligar e desligar PC
+        document.addEventListener('keyup', function(e){
+            var textInicial = BotJota.Inicial();
+            PC_Obj.SaveTextTotal = BotJota.nameBOT+': '+textInicial;
+            let objsUtil = [
+                document.querySelector('.handpower'),
+                document.querySelector('#btnClickAnim'),
+                document.querySelector('.screenLoad')
+            ];
+            let UserTolls = [
+                TextDiv,
+                InputUser,
+                DollBot
+            ];
+            let dollext = ['assets/DollGifs/DollStatic.gif', 'assets/DollGifs/DollTallk.gif'];
+
+            PC_Obj.powerFunction(PC_Obj, e, btnEnvUser, UserTolls, objsUtil, dollext);
+        });
+
+        //user está escrevendo
+        document.querySelector('#YourText').oninput = ()=>{
+            let vl = InputUser.value;
+
+            let space = '<br><br>_____________<br><br>';
+            TextDiv.innerHTML = PC_Obj.SaveTextTotal+space+"* " + vl;
+        };
+
+        //btnEnviar
+        document.querySelector('.btnEnviar').addEventListener('click', btnEnviarBot);
+
+        //tirou o foco do input quando 
+        document.querySelector('body').addEventListener('click', ()=>{
+            if(PC_Obj.power===true){
+                InputUser.focus();
+                btnEnvUser.addEventListener('click', btnEnviarBot);
+            }
+        });
+
+        function btnEnviarBot(){
+            this.removeEventListener('click', btnEnviarBot);
+
+            $('#YourText').attr('disabled', 'disabled');
+            let vl = InputUser.value;
+            
+            TextDiv.innerHTML +='<br><br>_____________<br><br>'+BotJota.nameBOT+': ';
+            let respostOnbot = BotJota.botResove(vl);
+
+            PC_Obj.typeWriter(TextDiv, respostOnbot, PC_Obj.timeAnimationText);
+            PC_Obj.clearInput(InputUser);
+            PC_Obj.Dollanim(DollBot, ['assets/DollGifs/DollStatic.gif', 'assets/DollGifs/DollTallk.gif'], (PC_Obj.timeAnimationText * respostOnbot.length));
+            
+            setTimeout(() => {
+                let bodie = document.querySelector('body');
+                $('#YourText').removeAttr('disabled');
+                bodie.click();
+
+                PC_Obj.SaveTextTotal = TextDiv.innerHTML;
+            }, (PC_Obj.timeAnimationText * respostOnbot.length));
+        }
+    </script>
+</html>
